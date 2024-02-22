@@ -1,7 +1,5 @@
 from itertools import product
-from functools import cache
 
-@cache
 def arrangements(springs,numbers):
     if springs == "":
         return 1 if numbers == () else 0
@@ -25,20 +23,8 @@ content = [line.replace("\n", "") for line in open("day12.txt", encoding="utf8")
 total = 0
 
 for line in content:
-    read_springs = line.split()[0]
-    read_numbers = list(map(int,line.split()[1].split(',')))
-    springs = "" + read_springs
-    numbers = []
-
-    for i in range(4):
-        springs += '?' + read_springs
-
-    for i in range(5):
-        for n in read_numbers:
-            numbers.append(n)
-
-    numbers = tuple(numbers)
-
+    springs = line.split()[0]
+    numbers = tuple(map(int,line.split()[1].split(',')))
 
     total += arrangements(springs, numbers)
 

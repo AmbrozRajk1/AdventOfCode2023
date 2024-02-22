@@ -4,12 +4,9 @@ contentList = content.split('\n\n')
 seedsRead = [int(x) for x in contentList[0].split(':')[1].strip().split()]
 seeds = []
 for i in range(0,len(seedsRead)-1,2):
-    s = seedsRead[i]
-    c = seedsRead[i+1]
-    for j in range(s,s+c):
-        seeds.append(j)
-
-all = []
+    start = seedsRead[i]
+    count = seedsRead[i+1]
+    seeds.append((start,start+count))
 
 seedToSoil = []
 for l in contentList[1].split('\n')[1:]:
@@ -33,37 +30,130 @@ humidityToLocation = []
 for l in contentList[7].split('\n')[1:]:
     humidityToLocation.append([int(x) for x in l.strip().split()])
 
-for seed in seeds:
-    transform = seed
-    transformsts = transform
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in seedToSoil:
-        if transform >= s and transform < (s+r):
-            transformsts = d + (transform-s)
-    transformstf = transformsts
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in soilToFertilizer:
-        if transformsts >= s and transformsts < (s+r):
-            transformstf = d + (transformsts-s)
-    transformftw = transformstf
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in fertilizerToWater:
-        if transformstf >= s and transformstf < (s+r):
-            transformftw = d + (transformstf-s)
-    transformwtl = transformftw
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in waterToLight:
-        if transformftw >= s and transformftw < (s+r):
-            transformwtl = d + (transformftw-s)
-    transformltt = transformwtl
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in lightToTemperature:
-        if transformwtl >= s and transformwtl < (s+r):
-            transformltt = d + (transformwtl-s)
-    transformtth = transformltt
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in temperatureToHumidity:
-        if transformltt >= s and transformltt < (s+r):
-            transformtth = d + (transformltt-s)
-    transformhtl = transformtth
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
+
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
+
+temp = []
+while(len(seeds) > 0):
+    si, ei = seeds.pop()
     for d, s, r in humidityToLocation:
-        if transformtth >= s and transformtth < (s+r):
-            transformhtl = d + (transformtth-s)
+        overlapS = max(si,s)
+        overlapE = min(ei,s+r)
 
-    all.append(transformhtl)
+        if overlapS < overlapE:
+            temp.append((overlapS-s+d, overlapE-s+d))
+            if overlapS > si:
+                seeds.append((si,overlapS))
+            if ei > overlapE:
+                seeds.append((overlapE,ei))
+            break
+    else:
+        temp.append((si,ei))
+seeds = temp
 
-print(min(all))
+print(min(seeds))

@@ -38,6 +38,9 @@ for str in content[0].split(','):
                 if e.startswith(label + " "):
                     d[box].remove(e)
 
+    for key, value in d.items():
+        print(f"Box {key}: {value}")
+    print()
 totalfp = 0
 
 for key, value in d.items():
